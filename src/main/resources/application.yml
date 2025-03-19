@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: wallet-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/wallet_db
+
+aws:
+  sns:
+    region: us-east-1
+    endpoint: http://localhost:4566
+
+logging:
+  level:
+    root: INFO
+    com.example.wallet: DEBUG
+  file:
+    name: logs/application.log
+  loggers:
+    audit: logs/audit.log

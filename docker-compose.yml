@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  wallet-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wallet-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+      - localstack
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/wallet_db
+      - AWS_SNS_REGION=us-east-1
+      - AWS_SNS_ENDPOINT=http://localstack:4566
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns
+      - DEFAULT_REGION=us-east-1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes:
+  mongo_data:
