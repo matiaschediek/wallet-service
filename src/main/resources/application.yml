@@ -3,12 +3,14 @@ spring:
     name: wallet-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/wallet_db
+      uri: ${MONGO_URI://localhost:27017/wallet_db}
 
 aws:
   sns:
-    region: us-east-1
-    endpoint: http://localhost:4566
+    key: ${AWS_ACCESS_KEY_ID:accessKey}
+    secret: ${AWS_SECRET_ACCESS_KEY:secretKey}
+    region: ${AWS_REGION:us-east-1}
+    endpoint: ${SNS_ENDPOINT_OVERRIDE:http://localhost:4566}
 
 logging:
   level:
