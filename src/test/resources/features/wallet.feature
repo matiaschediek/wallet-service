@@ -11,14 +11,14 @@ Feature: Wallet Management
   Scenario: Check current balance
     Given a user "D545B126-F714-469F-B59A-5487E86FE871" has an existing wallet with a balance of 100
     When the user "D545B126-F714-469F-B59A-5487E86FE871" checks the current balance
-    Then the system should report a balance of 100
+    Then the system should report a balance of 100 for user "D545B126-F714-469F-B59A-5487E86FE871"
 
   # 3. Check the balance at a historical point in time
   Scenario: Check historical balance
     Given a user "D545B126-F714-469F-B59A-5487E86FE871" has an existing wallet with a balance of 100
-    And the wallet's balance was 50 at "2025-03-10T10:00:00"
+    And the user "D545B126-F714-469F-B59A-5487E86FE871" wallet's balance was 50 at "2025-03-10T10:00:00"
     When the user "D545B126-F714-469F-B59A-5487E86FE871" checks the balance at "2025-03-10T10:00:00"
-    Then the system should report a balance of 50
+    Then the system should report a balance of 50 for user "D545B126-F714-469F-B59A-5487E86FE871"
 
   # 4. Deposit funds
   Scenario: Deposit money into a wallet
