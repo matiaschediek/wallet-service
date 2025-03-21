@@ -33,7 +33,7 @@ public class MongoDBTransactionsRepository implements TransactionsRepository {
 
     @Override
     public Transaction findByWalletIdAndTimestamp(UUID walletId, LocalDateTime timestamp) {
-        Query query = new Query(Criteria.where("walletId").is(walletId.toString()).and("timestamp").is(timestamp));
+        Query query = new Query(Criteria.where("walletId").is(walletId.toString()).and("timestamp").lte(timestamp));
         TransactionDocument doc = mongoTemplate.findOne(query, TransactionDocument.class);
         return doc != null ? doc.toDomain() : null;
     }
