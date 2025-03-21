@@ -2,6 +2,7 @@ package mchediek.wallet_service.infrastructure.persistence;
 
 import mchediek.wallet_service.domain.entities.Transaction;
 import mchediek.wallet_service.domain.repositories.TransactionsRepository;
+import mchediek.wallet_service.infrastructure.logging.AuditLogger;
 import mchediek.wallet_service.infrastructure.persistence.dtos.TransactionDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -26,8 +27,10 @@ public class MongoDBTransactionsRepository implements TransactionsRepository {
 
     @Override
     public Transaction save(Transaction transaction) {
+        AuditLogger.log("Saving transaction: " + transaction);
         TransactionDocument doc = new TransactionDocument(transaction);
         TransactionDocument saved = mongoTemplate.save(doc);
+        AuditLogger.log("Transaction saved: " + saved);
         return saved.toDomain();
     }
 

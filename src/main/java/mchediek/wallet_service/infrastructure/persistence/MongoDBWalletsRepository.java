@@ -2,6 +2,7 @@ package mchediek.wallet_service.infrastructure.persistence;
 
 import mchediek.wallet_service.domain.entities.Wallet;
 import mchediek.wallet_service.domain.repositories.WalletsRepository;
+import mchediek.wallet_service.infrastructure.logging.AuditLogger;
 import mchediek.wallet_service.infrastructure.persistence.dtos.WalletDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -23,9 +24,12 @@ public class MongoDBWalletsRepository implements WalletsRepository {
 
     @Override
     public Wallet save(Wallet wallet) {
+
+        AuditLogger.log("Saving wallet: " + wallet.getId());
         WalletDocument doc = new WalletDocument(wallet);
-        WalletDocument saved = mongoTemplate.save(doc);
-        return saved.toDomain();
+        Wallet saved = mongoTemplate.save(doc).toDomain();
+        AuditLogger.log("Wallet saved: " + saved.getId());
+        return saved;
     }
 
     @Override

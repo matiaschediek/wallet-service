@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import mchediek.wallet_service.application.WalletManagementService;
 import mchediek.wallet_service.domain.entities.Amount;
 import mchediek.wallet_service.domain.entities.Wallet;
+import mchediek.wallet_service.infrastructure.logging.AuditLogger;
 import mchediek.wallet_service.infrastructure.web.dtos.TransactionRequestDTO;
 import mchediek.wallet_service.infrastructure.web.dtos.WalletDto;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class WalletController {
     @Operation(summary = "Create a new wallet", description = "Creates a wallet for the given user with an initial balance.")
     @PostMapping("/")
     public ResponseEntity<Wallet> createWallet(@RequestBody WalletDto requestedWallet) {
+        AuditLogger.log("Creating wallet for user " + requestedWallet.getUserId());
         Wallet wallet = walletService.createWallet(requestedWallet.getUserId(), new Amount(requestedWallet.getBalance()));
         return ResponseEntity.ok(wallet);
     }
@@ -58,6 +60,9 @@ public class WalletController {
             @Parameter(description = "UUID of the wallet") @PathVariable UUID walletId,
             @RequestBody TransactionRequestDTO transactionRequest
             ) {
+
+        AuditLogger.log("Performing transaction "+ transactionRequest.getType().name() +" on wallet " + walletId + " for amount " + transactionRequest.getAmount());
+
         return switch (transactionRequest.getType()) {
             case DEPOSIT ->
                     ResponseEntity.ok(walletService.deposit(walletId, new Amount(transactionRequest.getAmount())));
