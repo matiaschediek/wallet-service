@@ -1,14 +1,15 @@
 package mchediek.wallet_service.bdd.stepdefs;
 
-
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.sl.Ampak;
+import io.cucumber.spring.ScenarioScope;
 import mchediek.wallet_service.application.WalletManagementService;
-import mchediek.wallet_service.domain.Amount;
-import mchediek.wallet_service.domain.TransactionManagementService;
-import mchediek.wallet_service.domain.Wallet;
+import mchediek.wallet_service.domain.entities.Amount;
+import mchediek.wallet_service.domain.entities.Transaction;
+import mchediek.wallet_service.domain.entities.TransactionType;
+import mchediek.wallet_service.domain.entities.Wallet;
+import mchediek.wallet_service.domain.repositories.TransactionsRepository;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,14 +18,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-@Component
 public class WalletSteps {
 
     @Autowired
     private WalletManagementService walletService;
 
     @Autowired
-    private TransactionManagementService transactionService;
+    private TransactionsRepository transactionsRepository;
 
     @Autowired
     private TestContext testContext;
@@ -40,7 +40,7 @@ public class WalletSteps {
     @Given("a user {string} has an existing wallet with a balance of {double}")
     public void aUserHasAnExistingWalletWithABalanceOf(String userId, double balance) {
         Amount balanceAmount = new Amount(balance);
-        Wallet wallet = walletService.createOrUpdateWallet(UUID.fromString(userId), balanceAmount);
+        Wallet wallet = walletService.createWallet(UUID.fromString(userId), balanceAmount);
         testContext.setWalletIdForUser(userId, wallet.getId().toString());
     }
 
@@ -49,13 +49,14 @@ public class WalletSteps {
         LocalDateTime timestamp = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String walletId = testContext.getWalletIdForUser(userId);
         Amount balanceAt = new Amount(balance);
-        transactionService.recordBalance(UUID.fromString(walletId), balanceAt, timestamp);
+        Transaction transaction = new Transaction(UUID.fromString(walletId), balanceAt, balanceAt, TransactionType.DEPOSIT, timestamp);
+        transactionsRepository.save(transaction);
     }
 
     @When("the user {string} requests a new wallet")
     public void theUserRequestsANewWallet(String userId) {
 
-        Wallet wallet = walletService.createOrUpdateWallet(UUID.fromString(userId), new Amount());
+        Wallet wallet = walletService.createWallet(UUID.fromString(userId), new Amount());
         testContext.setWalletIdForUser(userId, wallet.getId().toString());
     }
 

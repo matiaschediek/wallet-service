@@ -1,14 +1,20 @@
 package mchediek.wallet_service.bdd.stepdefs;
 
+
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
-class TestContext {
+public class TestContext {
     private final Map<String, String> userWalletMap = new HashMap<>();
     private final Map<String, Double> lastQueriedBalances = new HashMap<>();
+
+    public void clear() {
+        userWalletMap.clear();
+        lastQueriedBalances.clear();
+    }
 
     public void setWalletIdForUser(String userId, String walletId) {
         userWalletMap.put(userId, walletId);
