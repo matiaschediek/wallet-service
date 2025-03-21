@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	//implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	//implementation("software.amazon.awssdk:sns:2.28.11")
 	implementation("ch.qos.logback:logback-classic")
@@ -33,6 +33,8 @@ dependencies {
 	testImplementation(platform("org.junit:junit-bom:5.9.2"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
 	testImplementation("org.junit.platform:junit-platform-suite")
+	testImplementation("org.testcontainers:mongodb")
+	testImplementation("org.testcontainers:junit-jupiter")
 }
 
 tasks.test {

@@ -1,12 +1,14 @@
 package mchediek.wallet_service.bdd;
 
-import io.cucumber.java.Before;
 import io.cucumber.spring.CucumberContextConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
+import mchediek.wallet_service.MongoTestContainerConfig;
 import org.springframework.boot.test.context.SpringBootTest;
-import mchediek.wallet_service.bdd.stepdefs.TestContext;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 
 @CucumberContextConfiguration
+@Import(MongoTestContainerConfig.class)
 @SpringBootTest
 public class CucumberSpringConfiguration {
+
 }

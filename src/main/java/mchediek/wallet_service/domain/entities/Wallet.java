@@ -7,15 +7,13 @@ public class Wallet {
     private final Amount balance;
     private final UUID userId;
 
-    private Wallet(UUID id, Amount balance, UUID userId) {
+    public Wallet(UUID id, Amount balance, UUID userId) {
         this.id = id;
         this.balance = balance;
         this.userId = userId;
     }
     public Wallet(Amount balance, UUID userId) {
-        this.id = UUID.randomUUID();
-        this.balance = balance;
-        this.userId = userId;
+        this(UUID.randomUUID(), balance, userId);
     }
 
     public UUID getId() {

@@ -3,7 +3,7 @@ spring:
     name: wallet-service
   data:
     mongodb:
-      uri: ${MONGO_URI://localhost:27017/wallet_db}
+      uri: ${MONGO_URI:http://localhost:27017/wallet_db}
 
 aws:
   sns:

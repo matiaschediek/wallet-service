@@ -12,4 +12,5 @@ public class CucumberHooks {
     public void beforeScenario() {
         testContext.clear();
     }
+
 }
