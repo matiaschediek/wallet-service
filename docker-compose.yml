@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   wallet-service:
     build:
@@ -12,7 +10,7 @@ services:
       - mongodb
       - localstack
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/wallet_db
+      - MONGO_URI=mongodb://mongodb:27017/wallet_db
       - AWS_SNS_REGION=us-east-1
       - AWS_SNS_ENDPOINT=http://localstack:4566
 

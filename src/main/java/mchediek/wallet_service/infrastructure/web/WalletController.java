@@ -1,6 +1,9 @@
 package mchediek.wallet_service.infrastructure.web;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import mchediek.wallet_service.application.WalletManagementService;
 import mchediek.wallet_service.domain.entities.Amount;
 import mchediek.wallet_service.domain.entities.Wallet;
@@ -15,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/wallets")
+@Tag(name = "Wallet Management", description = "Operations related to user wallets")
 public class WalletController {
 
     private final WalletManagementService walletService;
@@ -23,32 +27,36 @@ public class WalletController {
         this.walletService = walletService;
     }
 
+    @Operation(summary = "Create a new wallet", description = "Creates a wallet for the given user with an initial balance.")
     @PostMapping("/")
     public ResponseEntity<Wallet> createWallet(@RequestBody WalletDto requestedWallet) {
         Wallet wallet = walletService.createWallet(requestedWallet.getUserId(), new Amount(requestedWallet.getBalance()));
         return ResponseEntity.ok(wallet);
     }
 
+    @Operation(summary = "Get current wallet by user ID", description = "Returns the current wallet for a given user.")
     @GetMapping("/")
-    public ResponseEntity<Wallet> getCurrentBalance(@RequestParam UUID userId) {
+    public ResponseEntity<Wallet> getCurrentBalance(@Parameter(description = "UUID of the user") @RequestParam UUID userId) {
         Wallet wallet = walletService.findWalletByUserId(userId);
         return wallet != null ? ResponseEntity.ok(wallet) : ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Get historical balance", description = "Returns the balance of a wallet at a specific timestamp.")
     @GetMapping("/{walletId}/history")
     public ResponseEntity<Double> getHistoricalBalance(
-            @PathVariable UUID walletId,
-            @RequestParam String timestamp
+            @Parameter(description = "UUID of the wallet") @PathVariable UUID walletId,
+            @Parameter(description = "Timestamp in ISO 8601 format (e.g. 2023-03-21T15:30:00)") @RequestParam String timestamp
     ) {
         LocalDateTime dateTime = LocalDateTime.parse(timestamp, DateTimeFormatter.ISO_DATE_TIME);
         Double historicalBalance = walletService.findHistoricalBalance(walletId, dateTime).getValue();
         return ResponseEntity.ok(historicalBalance);
     }
 
+    @Operation(summary = "Perform transaction", description = "Executes a deposit, withdrawal, or transfer on the wallet.")
     @PostMapping("/{walletId}/transaction")
     public ResponseEntity<Wallet> performTransaction(
-            @PathVariable UUID walletId,
-            @RequestParam TransactionRequestDTO transactionRequest
+            @Parameter(description = "UUID of the wallet") @PathVariable UUID walletId,
+            @RequestBody TransactionRequestDTO transactionRequest
             ) {
         return switch (transactionRequest.getType()) {
             case DEPOSIT ->

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "mchediek"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 
 java {
 	toolchain {
@@ -23,6 +23,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	//implementation("software.amazon.awssdk:sns:2.28.11")
 	implementation("ch.qos.logback:logback-classic")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
 	// Testing dependencies
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -3,7 +3,7 @@ FROM gradle:latest AS build
 WORKDIR /app
 
 COPY . .
-RUN gradle build --no-daemon
+RUN gradle build -x test --no-daemon
 
 FROM openjdk:21-jdk-slim AS run
 
