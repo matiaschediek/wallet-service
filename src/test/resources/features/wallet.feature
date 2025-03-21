@@ -7,6 +7,11 @@ Feature: Wallet Management
     Then a wallet is successfully created for user "d545b126-f714-469f-b59a-5487e86fe871"
     And the user "d545b126-f714-469f-b59a-5487e86fe871" wallet balance should be 0
 
+  Scenario: Create a wallet for a user that does have one
+    Given a user "CEE873BC-993D-4492-A7CC-A1D12E584E19" has an existing wallet with a balance of 0
+    When the user "CEE873BC-993D-4492-A7CC-A1D12E584E19" requests a new wallet
+    Then the system should report an error message "User already has a wallet"
+
   # 2. Check the current balance
   Scenario: Check current balance
     Given a user "BD19E48D-7720-4638-B6B5-2261CBE2C9AA" has an existing wallet with a balance of 100

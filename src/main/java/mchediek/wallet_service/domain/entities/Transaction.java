@@ -29,10 +29,4 @@ public class Transaction {
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
-    public Amount getAmount() {
-        return amount;
-    }
-    public TransactionType getType() {
-        return type;
-    }
 }

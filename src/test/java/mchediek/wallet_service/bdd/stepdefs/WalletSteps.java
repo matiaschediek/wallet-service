@@ -55,9 +55,12 @@ public class WalletSteps {
 
     @When("the user {string} requests a new wallet")
     public void theUserRequestsANewWallet(String userId) {
-
-        Wallet wallet = walletService.createWallet(UUID.fromString(userId), new Amount());
-        testContext.setWalletIdForUser(userId, wallet.getId().toString());
+        try {
+            Wallet wallet = walletService.createWallet(UUID.fromString(userId), new Amount());
+            testContext.setWalletIdForUser(userId, wallet.getId().toString());
+        } catch (Exception e) {
+            testContext.setErrorMessage(e.getMessage());
+        }
     }
 
     @When("the user {string} checks the current balance")
@@ -126,6 +129,12 @@ public class WalletSteps {
         double lastBalance = testContext.getLastQueriedBalance(userId);
         Assertions.assertEquals(expectedBalance, lastBalance,
                 "Historical balance mismatch: expected " + expectedBalance + " but found " + lastBalance);
+    }
+
+    @Then("the system should report an error message {string}")
+    public void theSystemShouldReportAnErrorMessage(String errorMessage) {
+        Assertions.assertEquals(errorMessage, testContext.getErrorMessage(),
+                "Unexpected error message: expected " + errorMessage + " but found " + testContext.getErrorMessage());
     }
 }
 

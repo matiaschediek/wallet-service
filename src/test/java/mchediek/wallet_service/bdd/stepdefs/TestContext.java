@@ -10,6 +10,7 @@ import java.util.Map;
 public class TestContext {
     private final Map<String, String> userWalletMap = new HashMap<>();
     private final Map<String, Double> lastQueriedBalances = new HashMap<>();
+    private String errorMessage;
 
     public void clear() {
         userWalletMap.clear();
@@ -30,5 +31,13 @@ public class TestContext {
 
     public Double getLastQueriedBalance(String userId) {
         return lastQueriedBalances.getOrDefault(userId,  -1d);
+    }
+
+    public void setErrorMessage(String message) {
+        errorMessage = message;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
