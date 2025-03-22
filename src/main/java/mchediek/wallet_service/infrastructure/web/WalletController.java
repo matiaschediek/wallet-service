@@ -29,7 +29,7 @@ public class WalletController {
     }
 
     @Operation(summary = "Create a new wallet", description = "Creates a wallet for the given user with an initial balance.")
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Wallet> createWallet(@RequestBody WalletDto requestedWallet) {
         AuditLogger.log("Creating wallet for user " + requestedWallet.getUserId());
         Wallet wallet = walletService.createWallet(requestedWallet.getUserId(), new Amount(requestedWallet.getBalance()));
@@ -37,7 +37,7 @@ public class WalletController {
     }
 
     @Operation(summary = "Get current wallet by user ID", description = "Returns the current wallet for a given user.")
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<Wallet> getCurrentBalance(@Parameter(description = "UUID of the user") @RequestParam UUID userId) {
         Wallet wallet = walletService.findWalletByUserId(userId);
         return wallet != null ? ResponseEntity.ok(wallet) : ResponseEntity.notFound().build();

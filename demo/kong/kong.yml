@@ -1,0 +1,35 @@
+_format_version: "3.0"
+services:
+  - name: login
+    url: http://login:3000
+    routes:
+      - name: login-route
+        paths:
+          - /auth
+  - name: wallet-service
+    url: http://wallet-service:8080
+    routes:
+      - name: wallet-service-route
+        paths:
+          - /wallet-service
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        plugins:
+          - name: jwt
+            config:
+              claims_to_verify:
+                - exp
+              key_claim_name: kid
+
+
+
+consumers:
+  - username: m2m-client
+    custom_id: m2m-client-id
+    jwt_secrets:
+      - algorithm: HS256
+        key: my-m2m-key
+        secret: super-secret-key

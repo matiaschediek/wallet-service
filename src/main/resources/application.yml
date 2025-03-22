@@ -1,16 +1,12 @@
 spring:
   application:
     name: wallet-service
+  auth:
+    uri: ${AUTH_URI:http://localhost:8000/auth/verify}
   data:
     mongodb:
       uri: ${MONGO_URI:http://localhost:27017/wallet_db}
 
-aws:
-  sns:
-    key: ${AWS_ACCESS_KEY_ID:accessKey}
-    secret: ${AWS_SECRET_ACCESS_KEY:secretKey}
-    region: ${AWS_REGION:us-east-1}
-    endpoint: ${SNS_ENDPOINT_OVERRIDE:http://localhost:4566}
 
 logging:
   level:

@@ -32,6 +32,9 @@ This service manages digital wallets for users, supporting the following operati
 7. **Separate Logging Mechanism**:
    - **Application Logs**: For debugging and monitoring.
    - **Audit Logs**: To track financial transactions and ensure traceability.
+8. **Docker for Containerization**: Ensures consistency across different environments and simplifies deployment.
+9. **JWT for Authentication**: Provides a secure way to authenticate users and authorize requests.
+10. **API Gateway (Kong)**: To manage API traffic, security, and monitoring.
 
 ---
 
@@ -56,8 +59,23 @@ This will start:
 docker ps
 ```
 
-### 4️⃣ Access the Wallet Service 🌐
+### 4️⃣ Get Auth JWT Token 🔑
+```bash
+TOKEN=$(curl -s http://localhost:8000/auth/login | jq -r .token)
+```
+
+### 5️⃣ Create a Wallet 🎉
+```bash
+curl -v -H "Authorization: Bearer $TOKEN" \
+  -H 'accept: */*' \
+  -H "Content-Type: application/json" \
+  -X POST http://localhost:8000/wallet-service/wallets \
+  -d '{ "balance": 0, "userId": "DC56A1E2-4CA1-4647-A492-DD7C227A5885"}'
+```
+
+## Service documentation 📚📖🔍
 - **Swagger UI**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
 
 ## Testing the Service 🧪🔬🚀
 
@@ -66,9 +84,7 @@ docker ps
 ```
 
 ## Next Steps 🚀🔜📈
-- **Implement Security**: Add authentication and authorization mechanisms.
-  - **JWT**: Secure API endpoints with JSON Web Tokens.
-  - **Kong Gateway**: Integrate with Kong for API management and security.
+- **Error Handling**: Implement robust error handling and validation.
 - **Monitoring & Alerting**: Implement health checks and monitoring with Prometheus and Grafana.
 - **CI/CD Pipeline**: Automate the build and deployment process with Jenkins or GitLab CI.
 - **Domain Events**: Implement domain events for better decoupling and scalability.
