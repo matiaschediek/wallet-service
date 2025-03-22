@@ -22,16 +22,5 @@ services:
     volumes:
       - mongo_data:/data/db
 
-  localstack:
-    image: localstack/localstack
-    container_name: localstack
-    ports:
-      - "4566:4566"
-    environment:
-      - SERVICES=sns
-      - DEFAULT_REGION=us-east-1
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-
 volumes:
   mongo_data:

@@ -21,7 +21,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	//implementation("software.amazon.awssdk:sns:2.28.11")
 	implementation("ch.qos.logback:logback-classic")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
