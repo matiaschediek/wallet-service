@@ -3,11 +3,15 @@ package mchediek.wallet_service.infrastructure.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mchediek.wallet_service.application.WalletManagementService;
 import mchediek.wallet_service.domain.entities.Amount;
 import mchediek.wallet_service.domain.entities.Wallet;
 import mchediek.wallet_service.infrastructure.logging.AuditLogger;
+import mchediek.wallet_service.infrastructure.web.dtos.ApiError;
 import mchediek.wallet_service.infrastructure.web.dtos.TransactionRequestDTO;
 import mchediek.wallet_service.infrastructure.web.dtos.WalletDto;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +33,15 @@ public class WalletController {
     }
 
     @Operation(summary = "Create a new wallet", description = "Creates a wallet for the given user with an initial balance.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Wallet created successfully"
+    )
+    @ApiResponse(
+            responseCode = "422",
+            description = "Domain error: Wallet already exists for the user",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+    )
     @PostMapping
     public ResponseEntity<Wallet> createWallet(@RequestBody WalletDto requestedWallet) {
         AuditLogger.log("Creating wallet for user " + requestedWallet.getUserId());
@@ -37,9 +50,14 @@ public class WalletController {
     }
 
     @Operation(summary = "Get current wallet by user ID", description = "Returns the current wallet for a given user.")
+    @ApiResponse(
+            responseCode = "404",
+            description = "Wallet not found"
+    )
     @GetMapping
     public ResponseEntity<Wallet> getCurrentBalance(@Parameter(description = "UUID of the user") @RequestParam UUID userId) {
         Wallet wallet = walletService.findWalletByUserId(userId);
+
         return wallet != null ? ResponseEntity.ok(wallet) : ResponseEntity.notFound().build();
     }
 

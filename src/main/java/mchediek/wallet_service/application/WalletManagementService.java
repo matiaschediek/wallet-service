@@ -4,9 +4,9 @@ import mchediek.wallet_service.domain.entities.Amount;
 import mchediek.wallet_service.domain.entities.Transaction;
 import mchediek.wallet_service.domain.entities.TransactionType;
 import mchediek.wallet_service.domain.entities.Wallet;
+import mchediek.wallet_service.domain.exceptions.ExistingWalletForUserException;
 import mchediek.wallet_service.domain.repositories.TransactionsRepository;
 import mchediek.wallet_service.domain.repositories.WalletsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class WalletManagementService {
     public Wallet createWallet(UUID userId, Amount balance) {
         Wallet existingWallet = findWalletByUserId(userId);
         if (existingWallet != null) {
-            throw new IllegalStateException("User already has a wallet");
+            throw new ExistingWalletForUserException();
         }
         Wallet wallet = new Wallet(balance, userId);
 
